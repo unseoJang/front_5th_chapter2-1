@@ -9,6 +9,7 @@
  *  7. 이벤트 리스너 `main()` 안으로 넣기
  *  8. 리액트로 변경이 쉽게 화살표 함수로 변경
  *  9. 타입스크립트 변경 용의를 위한 가드 추가
+ * 10. 명령형 -> 선언형???
  */
 
 // 상품 할인율 상수
@@ -21,7 +22,18 @@ const TUESDAY_DISCOUNT_AMOUNT_PERCENT = 0.1;
 
 // 고정된 클래스 명
 const CLASS_PRODUCT_WRAPPER = 'flex justify-between items-center mb-2';
-const CLASS_BTN_QUANTITY = 'quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1';
+const CLASS_BTN_QUANTITY =
+  'quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1';
+const CLASS_BTN_REMOVE = 'remove-item bg-red-500 text-white px-2 py-1 rounded';
+const CLASS_DISCOUNT_TAG = 'text-green-500 ml-2';
+const CLASS_POINTS_TAG = 'text-blue-500 ml-2';
+
+// 특정 문자열 키
+const DATASET_KEY_PRODUCT_ID = 'productId';
+const DATASET_KEY_CHANGE = 'change';
+
+// 정규화된 텍스ㅡ 파싱 기준 문자
+const QUANTITY_TEXT_SEPARATOR = 'x ';
 
 // 상품 할인율 상수
 const PRODUCT_DISCOUT_MAP = {
@@ -32,15 +44,82 @@ const PRODUCT_DISCOUT_MAP = {
   p5: 0.25,
 };
 
-const getDiscountPrice = (price, percent) => price * (1 - percent); // 할인율 적용
+/**
+ * 할인 비율 적용
+ * @param {*} price
+ * @param {*} percent
+ * @returns {number}
+ */
+const getDiscountPrice = (price, percent) => price * (1 - percent);
 
-const prodList = [
-  { id: 'p1', name: '상품1', val: 10000, q: 50 },
-  { id: 'p2', name: '상품2', val: 20000, q: 30 },
-  { id: 'p3', name: '상품3', val: 30000, q: 20 },
-  { id: 'p4', name: '상품4', val: 15000, q: 0 },
-  { id: 'p5', name: '상품5', val: 25000, q: 10 },
-];
+/**
+ * 화요일인지 여부
+ * @returns {boolean}
+ */
+const isTuesday = () => {
+  return new Date().getDay() === 2;
+};
+
+/**
+ * 상품 목록에서 ID로 상품 찾기
+ * @param {*} prodList
+ * @param {*} id
+ * @returns {object}
+ */
+const getProductById = (prodList, id) => {
+  return prodList.find((product) => product.id === id);
+};
+
+/**
+ * 텍스트에서 수량 파싱 (예: 'x 3' → 3)
+ * @param {*} text
+ * @param {*} separator
+ * @returns
+ */
+const getQuantityFromText = (text, separator = QUANTITY_TEXT_SEPARATOR) => {
+  return parseInt(text.split(separator)[1], 10);
+};
+
+/**
+ * 텍스트로부터 수량 + 변화량 계산 (예: 'x 3' + 1 -> 4)
+ * @param {*} text
+ * @param {*} change
+ * @param {*} separator
+ * @returns {number}
+ */
+const getUpdatedQuantity = (
+  text,
+  change,
+  separator = QUANTITY_TEXT_SEPARATOR,
+) => {
+  const currentQuantity = getQuantityFromText(text, separator);
+  return currentQuantity + change;
+};
+
+/**
+ * 재고 부족 여부 확인
+ * @param {*} stock // 재고 수량
+ * @param {*} requested // 요청 수량
+ * @returns {boolean}
+ */
+const hasInsufficientStock = (stock, requested) => requested > stock;
+
+/**
+ * 상품 표시 텍스트 포맷팅
+ * @param {*} name
+ * @param {*} price
+ * @param {*} quantity
+ * @param {*} separator
+ * @returns {string}
+ */
+const formatProductDisplayText = (
+  name,
+  price,
+  quantity,
+  separator = QUANTITY_TEXT_SEPARATOR,
+) => {
+  return `${name} - ${price}원 ${separator}${quantity}`;
+};
 
 // main 함수 - DOM 구성 및 이벤트 설정
 const main = () => {
@@ -131,22 +210,20 @@ const main = () => {
     const cartItems = cartDisplay.children;
     let cartAllItemPrice = 0; // 카트 전체 상품 가격
 
-    //
+    // 장바구니에 담긴 상품들
     for (let i = 0; i < cartItems.length; i++) {
-      //
+      // 상품 아이템
       (() => {
         let currentProduct;
-
-        for (let j = 0; j < prodList.length; j++) {
-          if (prodList[j].id === cartItems[i].id) {
-            currentProduct = prodList[j];
-            break;
-          }
-        }
-
-        const quantity = parseInt(
-          cartItems[i].querySelector('span').textContent.split('x ')[1], // 수량
+        // 상품 ID로 상품 찾기
+        const productId = cartItems[i].id;
+        currentProduct = getProductById(prodList, productId); // 상품 찾기
+        // 상품 수량
+        const quantity = getQuantityFromText(
+          cartItems[i].querySelector('span').textContent,
+          QUANTITY_TEXT_SEPARATOR,
         );
+
         const currentProductPrice = currentProduct.val * quantity;
         let discount = 0;
         cartAllItemCount += quantity;
@@ -184,9 +261,7 @@ const main = () => {
         (cartAllItemPrice - finalPaymentAmount) / cartAllItemPrice;
     }
 
-    const isTuesday = new Date().getDay() === 2; // 화요일 체크
-
-    if (isTuesday) {
+    if (isTuesday()) {
       finalPaymentAmount *= 1 - TUESDAY_DISCOUNT_AMOUNT_PERCENT;
       discountPercent = Math.max(
         discountPercent,
@@ -197,7 +272,7 @@ const main = () => {
 
     if (discountPercent > 0) {
       const span = document.createElement('span');
-      span.className = 'text-green-500 ml-2';
+      span.className = CLASS_DISCOUNT_TAG;
       span.textContent =
         '(' + (discountPercent * 100).toFixed(1) + '% 할인 적용)';
       totalDisplay.appendChild(span);
@@ -215,7 +290,7 @@ const main = () => {
     if (!pointsTag) {
       pointsTag = document.createElement('span');
       pointsTag.id = 'loyalty-points';
-      pointsTag.className = 'text-blue-500 ml-2';
+      pointsTag.className = CLASS_POINTS_TAG;
       totalDisplay.appendChild(pointsTag);
     }
     pointsTag.textContent = '(포인트: ' + bonusPoints + ')';
@@ -262,9 +337,10 @@ const main = () => {
   setTimeout(() => {
     setInterval(() => {
       if (lastSelectedProductId) {
-        const suggestedProduct = prodList.find(function (product) {
-          return product.id !== lastSelectedProductId && product.q > 0;
-        });
+        const suggestedProduct = getProductById(
+          prodList,
+          lastSelectedProductId,
+        );
         if (suggestedProduct) {
           alert(
             suggestedProduct.name +
@@ -282,28 +358,31 @@ const main = () => {
    * 장바구니 추가 버튼
    */
   addCartButton.addEventListener('click', () => {
-    const selectedProductId = select.value;
-    const itemToAdd = prodList.find((p) => {
-      return p.id === selectedProductId;
-    });
+    const selectedProductId = select.value; // 선택된 상품 ID
+    const itemToAdd = getProductById(prodList, selectedProductId); // 선택된 상품
 
     if (itemToAdd && itemToAdd.q > 0) {
       const item = document.getElementById(itemToAdd.id);
 
-      if (item) {
-        const updatedQuantity =
-          parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1;
+      if (item && item !== null) {
+        // 이미 장바구니에 있는 상품일 경우
+        const updatedQuantity = getUpdatedQuantity(
+          item.querySelector('span').textContent,
+          1,
+          QUANTITY_TEXT_SEPARATOR,
+        );
 
         if (updatedQuantity <= itemToAdd.q) {
           const spanElement = item.querySelector('span');
 
+          // 수량 업데이트
           if (spanElement) {
-            spanElement.textContent =
-              itemToAdd.name +
-              ' - ' +
-              itemToAdd.val +
-              '원 x ' +
-              updatedQuantity;
+            spanElement.textContent = formatProductDisplayText(
+              itemToAdd.name,
+              itemToAdd.val,
+              updatedQuantity,
+              QUANTITY_TEXT_SEPARATOR,
+            );
           } else {
             console.error('Span element not found for item:', itemToAdd.id);
           }
@@ -314,20 +393,16 @@ const main = () => {
       } else {
         const newItem = document.createElement('div');
         newItem.id = itemToAdd.id;
-        newItem.className = 'flex justify-between items-center mb-2';
+        newItem.className = CLASS_PRODUCT_WRAPPER;
         newItem.innerHTML =
-          '<span>' +
-          itemToAdd.name +
-          ' - ' +
-          itemToAdd.val +
-          '원 x 1</span><div>' +
-          '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
+          `<span>${formatProductDisplayText(itemToAdd.name, itemToAdd.val, 1, QUANTITY_TEXT_SEPARATOR)}</span><div>` +
+          `<button class="${CLASS_BTN_QUANTITY}" data-product-id="` +
           itemToAdd.id +
           '" data-change="-1">-</button>' +
-          '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
+          `<button class="${CLASS_BTN_QUANTITY}" data-product-id="` +
           itemToAdd.id +
           '" data-change="1">+</button>' +
-          '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="' +
+          `<button class="${CLASS_BTN_REMOVE}" data-product-id="` +
           itemToAdd.id +
           '">삭제</button></div>';
         cartDisplay.appendChild(newItem);
@@ -350,13 +425,11 @@ const main = () => {
       (target instanceof HTMLElement &&
         target.classList.contains('remove-item'))
     ) {
-      const targetProductId = target.dataset.productId; // target
+      const targetProductId = target.dataset[DATASET_KEY_PRODUCT_ID]; // target
       const itemElement = targetProductId
         ? document.getElementById(targetProductId)
         : null;
-      const selectedProduct = prodList.find(function (product) {
-        return product.id === targetProductId;
-      });
+      const selectedProduct = getProductById(prodList, targetProductId); // 상품 찾기
 
       // 이벤트 델리게이션이나 특정 요소만 조건 분기할 때 자주 씀
       if (
@@ -365,24 +438,33 @@ const main = () => {
         itemElement &&
         itemElement.querySelector('span')?.textContent
       ) {
-        const currentQuantity = parseInt(target.dataset.change || '0');
-        const updatedQuantity =
-          parseInt(
-            itemElement.querySelector('span').textContent.split('x ')[1],
-          ) + currentQuantity;
-
+        // 수량 변경 버튼 클릭
+        const currentQuantity = parseInt(
+          target.dataset[DATASET_KEY_CHANGE] || '0',
+        );
+        // 수량 변경
+        const updatedQuantity = getUpdatedQuantity(
+          itemElement.querySelector('span').textContent,
+          currentQuantity,
+          QUANTITY_TEXT_SEPARATOR,
+        );
         if (
           updatedQuantity > 0 &&
           updatedQuantity <=
             selectedProduct.q +
-              parseInt(
-                itemElement.querySelector('span').textContent.split('x ')[1],
+              getQuantityFromText(
+                itemElement.querySelector('span').textContent,
+                QUANTITY_TEXT_SEPARATOR,
               )
         ) {
           itemElement.querySelector('span').textContent =
-            itemElement.querySelector('span').textContent.split('x ')[0] +
-            'x ' +
-            updatedQuantity;
+            formatProductDisplayText(
+              selectedProduct.name,
+              selectedProduct.val,
+              updatedQuantity,
+              QUANTITY_TEXT_SEPARATOR,
+            );
+
           selectedProduct.q -= currentQuantity;
         } else if (updatedQuantity <= 0) {
           itemElement.remove();
@@ -393,7 +475,9 @@ const main = () => {
       } else if (target.classList.contains('remove-item')) {
         const selectedQuantity = parseInt(
           // 남은 수량
-          itemElement.querySelector('span').textContent.split('x ')[1],
+          itemElement
+            .querySelector('span')
+            .textContent.split(QUANTITY_TEXT_SEPARATOR)[1],
         );
         selectedProduct.q += selectedQuantity;
         itemElement.remove();
