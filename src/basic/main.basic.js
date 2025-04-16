@@ -1,39 +1,13 @@
 import {
-  BULK_PURCHASE_THRESHOLD,
-  BULE_PURCHASE_PRODUCT_THRESHOLD,
-  EXTRA_DISCOUT_PERCENT,
   SUGGESTION_PRODUCT_INTERVAL,
   LUCKY_EVENT_SALE_INTERVAL,
-  TUESDAY_DISCOUNT_AMOUNT_PERCENT,
-  PRODUCT_DISCOUT_MAP,
 } from './constants/discount.js';
 
-import {
-  CLASS_PRODUCT_WRAPPER,
-  CLASS_BTN_QUANTITY,
-  CLASS_BTN_REMOVE,
-  CLASS_DISCOUNT_TAG,
-  CLASS_POINTS_TAG,
-} from './constants/className.js';
+
 
 import {
-  DATASET_KEY_PRODUCT_ID,
-  DATASET_KEY_CHANGE,
-  QUANTITY_TEXT_SEPARATOR,
-} from './constants/datasetKeys.js';
-
-import {
-  isTuesday,
-  getDiscountPrice,
   getProductById,
-  getQuantityFromText,
-  getUpdatedQuantity,
-  formatProductDisplayText,
-  applyBestBulkDiscount,
-  isValidUpdatedQuantity,
   updateProductOption,
-  renderBonusPoints,
-  updateStockStatus,
   calculateCart,
 } from './utils.js';
 
