@@ -1,5 +1,5 @@
-import React from 'react';
-export const CartSummary = () => {
+import React, { useMemo } from 'react';
+export const CartSummary = ({ cartItems }) => {
   return (
     <div id="cart-total" className="text-xl font-bold my-4">
       총액: 0원
