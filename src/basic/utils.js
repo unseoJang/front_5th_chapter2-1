@@ -118,9 +118,7 @@ const getIndividualDiscountAmount = (totalBefore, afterDiscount) =>
  * @property {number} individualDiscount - 개별 할인액
  */
 export const applyBestBulkDiscount = (
-  totalBeforeDiscount,
-  afterIndividualDiscount,
-  bulkDiscountRate,
+totalBeforeDiscount, afterIndividualDiscount, bulkDiscountRate, EXTRA_DISCOUT_PERCENT?: number,
 ) => {
   const bulkDiscount = getBulkDiscountAmount(
     afterIndividualDiscount,
