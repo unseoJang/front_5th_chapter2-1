@@ -1,16 +1,6 @@
 // ProductSelect.tsx
 import React from 'react';
-
-interface ProductSelectProps {
-  prodList: {
-    id: string;
-    name: string;
-    val: number;
-    q: number;
-  }[];
-  selectedId: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}
+import { ProductSelectProps } from '../types/CartItems';
 
 export const ProductSelect = ({
   prodList,

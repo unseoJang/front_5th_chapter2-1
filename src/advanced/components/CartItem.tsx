@@ -1,22 +1,8 @@
 import React from 'react';
 import { CLASS_BTN_QUANTITY, CLASS_BTN_REMOVE } from '../constants/classNAme';
+import type { CartItems } from '../types/CartItems';
 
-interface cartItems {
-  cartItems: CartItems;
-  onChangeQuantity: (id: string, change: number) => void;
-  onRemove: (id: string) => void;
-}
-
-interface CartItems {
-  id: string;
-  name: string;
-  val: number;
-  q: number;
-  // onChangeQuantity: (id: string, change: number) => void;
-  // onRemove: (id: string) => void;
-}
-
-export const CartItem: React.FC<cartItems> = ({
+export const CartItem: React.FC<CartItems> = ({
   cartItems,
   onChangeQuantity,
   onRemove,

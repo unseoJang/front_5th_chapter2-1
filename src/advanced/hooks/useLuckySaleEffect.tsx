@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { LUCKY_EVENT_SALE_INTERVAL } from '../constants/discount';
-import { CartItemType } from '../components/Cart';
+import { CartItemType } from '../types/CartItems';
 
 export const useLuckySaleEffect = (
   prodList: CartItemType[],

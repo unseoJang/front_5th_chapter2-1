@@ -9,14 +9,7 @@ import {
 } from '../utils/utils';
 import { useLuckySaleEffect } from '../hooks/useLuckySaleEffect';
 import { useSuggestionEffect } from '../hooks/useSuggestionEffect';
-
-// types.ts (또는 CartItem.tsx 위에)
-export interface CartItemType {
-  id: string;
-  name: string;
-  val: number;
-  q: number;
-}
+import type { CartItemType } from '../types/CartItems';
 
 export const Cart = () => {
   const [prodList, setProdList] = useState(() => [
@@ -29,8 +22,8 @@ export const Cart = () => {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [selectedProductId, setSelectedProductId] = useState<string>('p1');
 
-  // useLuckySaleEffect(prodList, setProdList);
-  // useSuggestionEffect(prodList, setProdList, selectedProductId);
+  useLuckySaleEffect(prodList, setProdList);
+  useSuggestionEffect(prodList, setProdList, selectedProductId);
 
   const handleAddToCart = () => {
     const product = prodList.find((p) => p.id === selectedProductId);

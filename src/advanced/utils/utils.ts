@@ -1,4 +1,4 @@
-import { CartItemType } from '../components/Cart';
+import { CartItemType } from '../types/CartItems';
 
 export function increaseCartItemQuantity(
   items: CartItemType[],

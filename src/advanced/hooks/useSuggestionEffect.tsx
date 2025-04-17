@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { SUGGESTION_PRODUCT_INTERVAL } from '../constants/discount';
-import { CartItemType } from '../components/Cart';
+import { CartItemType } from '../types/CartItems';
 
 export const useSuggestionEffect = (
   prodList: CartItemType[],
