@@ -29,8 +29,8 @@ export const Cart = () => {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [selectedProductId, setSelectedProductId] = useState<string>('p1');
 
-  useLuckySaleEffect(prodList, setProdList);
-  useSuggestionEffect(prodList, setProdList, selectedProductId);
+  // useLuckySaleEffect(prodList, setProdList);
+  // useSuggestionEffect(prodList, setProdList, selectedProductId);
 
   const handleAddToCart = () => {
     const product = prodList.find((p) => p.id === selectedProductId);

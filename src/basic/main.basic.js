@@ -3,13 +3,7 @@ import {
   LUCKY_EVENT_SALE_INTERVAL,
 } from './constants/discount.js';
 
-
-
-import {
-  getProductById,
-  updateProductOption,
-  calculateCart,
-} from './utils.js';
+import { getProductById, updateProductOption, calculateCart } from './utils.js';
 
 import { state } from './state.js';
 import {
@@ -110,7 +104,7 @@ const main = () => {
         updateProductOption();
       }
     }, LUCKY_EVENT_SALE_INTERVAL);
-  }, Math.random() * 10000);
+  }, Math.random() * 10);
 
   // Suggestion for other products
 
@@ -134,7 +128,7 @@ const main = () => {
         }
       }
     }, SUGGESTION_PRODUCT_INTERVAL);
-  }, Math.random() * 20000);
+  }, Math.random() * 20);
 
   // Initial rendering
   addCartButton.addEventListener('click', () => handleAddCartClick());
