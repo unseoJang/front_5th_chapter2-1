@@ -1,27 +1,37 @@
 {
-  "name": "front-5th-chapter2-1",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "start:basic": "vite serve --open ./index.basic.html",
-    "start:advanced": "vite serve --open ./index.advanced.html",
-    "test": "vitest",
-    "test:basic": "vitest basic.test.js",
-    "test:advanced": "vitest advanced.test.js",
-    "test:ui": "vitest --ui"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/user-event": "^14.6.1",
-    "@vitest/ui": "^3.1.1",
-    "eslint": "^9.24.0",
-    "jsdom": "^26.0.0",
-    "prettier": "^3.5.3",
-    "vite": "^6.2.6",
-    "vitest": "^3.1.1"
-  }
+	"name": "front-5th-chapter2-1",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"start:basic": "vite serve --open ./index.basic.html",
+		"start:advanced": "vite serve --open ./index.advanced.html",
+		"test": "vitest",
+		"test:basic": "vitest basic.test.js",
+		"test:advanced": "vitest advanced.test.js",
+		"test:ui": "vitest --ui",
+		"lint": "eslint ."
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.24.0",
+		"@testing-library/jest-dom": "^6.6.3",
+		"@testing-library/user-event": "^14.6.1",
+		"@types/react": "^19.1.2",
+		"@types/react-dom": "^19.1.2",
+		"@vitest/ui": "^3.1.1",
+		"eslint": "^9.24.0",
+		"jsdom": "^26.0.0",
+		"prettier": "^3.5.3",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.30.1",
+		"vite": "^6.2.6",
+		"vitest": "^3.1.1"
+	},
+	"dependencies": {
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0"
+	}
 }
