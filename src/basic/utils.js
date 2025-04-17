@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { CLASS_DISCOUNT_TAG, CLASS_POINTS_TAG } from './constants/className';
 import { QUANTITY_TEXT_SEPARATOR } from './constants/datasetKeys';
 import {
@@ -118,7 +119,10 @@ const getIndividualDiscountAmount = (totalBefore, afterDiscount) =>
  * @property {number} individualDiscount - 개별 할인액
  */
 export const applyBestBulkDiscount = (
-totalBeforeDiscount, afterIndividualDiscount, bulkDiscountRate, EXTRA_DISCOUT_PERCENT?: number,
+  totalBeforeDiscount,
+  afterIndividualDiscount,
+  bulkDiscountRate,
+  EXTRA_DISCOUT_PERCENT,
 ) => {
   const bulkDiscount = getBulkDiscountAmount(
     afterIndividualDiscount,

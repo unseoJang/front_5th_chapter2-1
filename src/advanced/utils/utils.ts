@@ -29,14 +29,6 @@ export const updateProductStock = (
 };
 
 /**
- * 화요일인지 여부
- * @returns {boolean}
- */
-export const isTuesday = () => {
-  return new Date().getDay() === 2;
-};
-
-/**
  * 할인 비율 적용
  * @param {*} price
  * @param {*} percent
@@ -95,3 +87,11 @@ const getIndividualDiscountAmount = (
   totalBefore: number,
   afterDiscount: number,
 ) => totalBefore - afterDiscount;
+
+/**
+ * 화요일인지 여부
+ * @returns {boolean}
+ */
+export const isTuesday = () => {
+  return new Date().getDay() === 2;
+};

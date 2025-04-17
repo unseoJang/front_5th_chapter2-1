@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
   SUGGESTION_PRODUCT_INTERVAL,
   LUCKY_EVENT_SALE_INTERVAL,

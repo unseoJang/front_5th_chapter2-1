@@ -1,5 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
-import { CartItemType } from './Cart';
+import React, { useMemo } from 'react';
 import {
   BULE_PURCHASE_PRODUCT_THRESHOLD,
   BULK_PURCHASE_THRESHOLD,
@@ -12,12 +11,9 @@ import {
   applyBestBulkDiscount,
   isTuesday,
 } from '../utils/utils';
+import { ICartItemType } from '../types/CartItems';
 
-interface Props {
-  cartItems: CartItemType[];
-}
-
-export const CartSummary: React.FC<Props> = ({ cartItems }) => {
+export const CartSummary: React.FC<ICartItemType> = ({ cartItems }) => {
   const { finalPrice, discountRate, bonusPoints } = useMemo(() => {
     let cartAllItemPrice = 0;
     let finalPaymentAmount = 0;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   CLASS_PRODUCT_WRAPPER,
   CLASS_BTN_QUANTITY,
